@@ -11,58 +11,39 @@
     <style>
         /* Custom Styles for Professional White and Red Theme */
         :root {
-            --primary-color: #D32F2F; /* Deep Professional Red */
-            --primary-hover: #E53935; /* Slightly brighter red for hover */
+            --primary-color: #C62828; /* Professional Deep Red (Darker than D32F2F for higher contrast) */
+            --primary-hover: #D32F2F; /* Lighter red for hover effects */
             --background-color: #ffffff; /* White background */
-            --card-bg: #f7f7f7; /* Very light gray for card backgrounds */
-            --text-color-dark: #1f2937; /* Dark Gray/Black for main text */
+            --card-bg: #fdfdfd; /* Near white for subtle separation */
+            --text-color-dark: #111827; /* Very Dark Gray/Black for main text (High Contrast) */
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--background-color);
-            color: var(--text-color-dark); /* Dark text on light background */
+            color: var(--text-color-dark);
             line-height: 1.6;
         }
 
-        /* Hero Section Gradient Border Effect */
+        /* Hero Section Subtle Red Border */
         .hero-border {
-            position: relative;
-            z-index: 10;
-            border: 1px solid #e5e7eb; /* Light border in light mode */
+            border: 1px solid #e5e7eb;
+            transition: box-shadow 0.3s ease;
         }
-        .hero-border::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 1.5rem; /* Matches rounded-3xl */
-            padding: 2px; /* Thickness of the border */
-            background: linear-gradient(45deg, var(--primary-color), #b71c1c); /* Red Gradient */
-            -webkit-mask: 
-                linear-gradient(#fff 0 0) content-box, 
-                linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            z-index: -1;
-            opacity: 0; /* Starts hidden */
-            transition: opacity 0.5s ease;
-        }
-        .hero-border:hover::before {
-             opacity: 0.6; /* Fades in on hover */
+        .hero-border:hover {
+            box-shadow: 0 15px 30px rgba(198, 40, 40, 0.1); /* Deep red hover shadow */
         }
 
-        /* Skill Card Hover Effect */
+        /* Skill Card Polish */
         .skill-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             cursor: pointer;
             border: 1px solid #e5e7eb;
+            background-color: var(--card-bg);
         }
         .skill-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(211, 47, 47, 0.15); /* Subtle red shadow */
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(198, 40, 40, 0.1);
             border-color: var(--primary-color);
         }
 
@@ -79,19 +60,22 @@
             width: 1.25rem;
             height: 1.25rem;
             background-color: var(--primary-color);
-            border: 4px solid var(--background-color); /* Matches page background */
+            border: 4px solid var(--background-color);
             border-radius: 50%;
-            transition: background-color 0.3s ease;
+            transition: transform 0.3s ease;
         }
         .timeline-item:hover .timeline-dot {
-            background-color: var(--primary-hover);
+            transform: scale(1.1);
+        }
+        .timeline-last {
+            border-left: none; /* Hide line below the last item */
         }
 
         /* Scroll Animation Classes (managed by JS) */
         .animate-scroll {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(15px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
         }
         .fade-in {
             opacity: 1;
@@ -113,145 +97,164 @@
 <body class="antialiased">
 
     <!-- Header & Navigation -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-100">
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-md border-b border-gray-100">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="text-xl font-bold tracking-widest text-[var(--text-color-dark)]">
-                <span class="text-[var(--primary-color)]">Naved</span>Shaikh
+            <div class="text-2xl font-extrabold tracking-wider text-[var(--text-color-dark)]">
+                <span class="text-[var(--primary-color)]">Naved</span> Shaikh
             </div>
-            <div class="space-x-4 hidden md:flex">
-                <a href="#home" class="text-gray-600 hover:text-[var(--primary-color)] transition duration-200">Home</a>
-                <a href="#skills" class="text-gray-600 hover:text-[var(--primary-color)] transition duration-200">Skills</a>
+            <div class="space-x-6 hidden md:flex text-sm font-medium">
+                <a href="#summary" class="text-gray-600 hover:text-[var(--primary-color)] transition duration-200">Summary</a>
+                <a href="#skills" class="text-gray-600 hover:text-[var(--primary-color)] transition duration-200">Expertise</a>
                 <a href="#experience" class="text-gray-600 hover:text-[var(--primary-color)] transition duration-200">Experience</a>
+                <a href="#education" class="text-gray-600 hover:text-[var(--primary-color)] transition duration-200">Education</a>
                 <a href="#projects" class="text-gray-600 hover:text-[var(--primary-color)] transition duration-200">Projects</a>
-                <a href="#contact" class="text-gray-600 hover:text-[var(--primary-color)] transition duration-200">Contact</a>
             </div>
+             <!-- Mobile Menu Button (omitted for single-file simplicity, but important for real production) -->
         </nav>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
 
         <!-- 1. HOME/HERO Section -->
-        <section id="home" class="pt-16 pb-20">
+        <section id="home" class="pt-8 pb-12">
             <div class="hero-border p-8 md:p-16 bg-[var(--card-bg)] rounded-3xl shadow-xl animate-scroll">
-                <div class="md:flex items-center justify-between">
+                <div class="md:flex items-start justify-between">
                     <div class="md:w-3/5">
-                        <p class="text-lg text-[var(--primary-color)] font-semibold mb-3 tracking-wider">Hello, I'm</p>
-                        <h1 class="text-5xl md:text-7xl font-extrabold mb-4 leading-tight text-[var(--text-color-dark)]">
+                        <p class="text-base text-[var(--primary-color)] font-semibold mb-2 tracking-[0.2em] uppercase">Cybersecurity Consultant</p>
+                        <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight text-[var(--text-color-dark)]">
                             Naved <span class="text-[var(--primary-color)]">Shaikh</span>
                         </h1>
-                        <h2 class="text-3xl md:text-4xl font-light text-gray-700 mb-8">
-                            Technical Consultant in <span class="font-bold text-[var(--primary-color)]">Cybersecurity</span>
+                        <h2 class="text-2xl md:text-3xl font-light text-gray-700 mb-6">
+                            Technical <span class="font-medium text-[var(--primary-color)]">Deployment & IAM</span> Specialist
                         </h2>
-                        <p class="text-gray-600 text-xl mb-10 max-w-xl">
-                            Seeking to leverage my technical acumen and problem-solving skills in a dynamic consulting role, where I can contribute to fortifying security postures and driving innovation in cybersecurity practices.
-                        </p>
-                        <div class="flex space-x-4">
-                            <a href="#contact" class="px-8 py-3 bg-[var(--primary-color)] text-white font-bold rounded-full hover:bg-[var(--primary-hover)] transition duration-300 transform hover:scale-[1.05]">
-                                Get in Touch
+                        <div class="flex space-x-4 pt-4">
+                            <a href="#contact" class="px-6 py-3 bg-[var(--primary-color)] text-white text-sm font-bold rounded-full hover:bg-[var(--primary-hover)] transition duration-300 shadow-md shadow-red-400/50">
+                                Connect Now
                             </a>
-                            <a href="https://www.linkedin.com/in/naved-shaikh-a34260215" target="_blank" class="px-8 py-3 bg-white text-gray-700 font-bold rounded-full border border-gray-300 hover:border-[var(--primary-color)] transition duration-300 transform hover:scale-[1.05] flex items-center space-x-2">
-                                <span data-lucide="linkedin" class="w-5 h-5 text-gray-700"></span>
-                                <span>LinkedIn</span>
+                            <a href="https://www.linkedin.com/in/naved-shaikh-a34260215/" target="_blank" class="px-6 py-3 bg-white text-gray-700 text-sm font-bold rounded-full border border-gray-300 hover:border-[var(--primary-color)] transition duration-300 flex items-center space-x-2">
+                                <span data-lucide="linkedin" class="w-4 h-4 text-gray-700"></span>
+                                <span>LinkedIn Profile</span>
                             </a>
                         </div>
                     </div>
-                    <div class="mt-12 md:mt-0 md:w-2/5 flex justify-center">
-                        <!-- Placeholder for a stylized profile image/illustration -->
-                        <div class="w-64 h-64 bg-gray-200 rounded-full flex items-center justify-center border-4 border-[var(--primary-color)] shadow-xl shadow-red-300/50">
-                            <span data-lucide="shield-half" class="w-24 h-24 text-[var(--primary-color)]"></span>
+                    <div class="mt-12 md:mt-0 md:w-2/5 flex justify-center md:justify-end">
+                        <div class="flex flex-col items-center">
+                            <!-- Contact Info Box -->
+                            <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-[var(--primary-color)] w-full max-w-xs">
+                                <p class="text-xs font-semibold uppercase text-gray-500 mb-3">Quick Contact</p>
+                                <div class="space-y-3 text-sm text-gray-700">
+                                    <div class="flex items-center space-x-2">
+                                        <span data-lucide="mail" class="w-4 h-4 text-[var(--primary-color)]"></span>
+                                        <span>snavedg08@gmail.com</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span data-lucide="phone" class="w-4 h-4 text-[var(--primary-color)]"></span>
+                                        <span>(+91) 8828149942</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <span data-lucide="map-pin" class="w-4 h-4 text-[var(--primary-color)]"></span>
+                                        <span>Mumbai, India</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+        
+        <!-- 2. SUMMARY/OBJECTIVE Section -->
+        <section id="summary" class="animate-scroll">
+            <div class="bg-gray-50 p-6 md:p-10 rounded-xl shadow-inner border-l-4 border-[var(--primary-color)]">
+                 <h2 class="text-2xl font-bold text-[var(--primary-color)] mb-4">Professional Summary</h2>
+                 <p class="text-gray-700 text-lg">
+                    A seasoned **technical consultant** specializing in cybersecurity with over **4 years of hands-on experience** in deploying and optimizing security solutions across diverse IT infrastructures. My core expertise is in **Identity & Access Management (IAM)** implementation, including IGA, PAM, SSO, and MFA, coupled with deep proficiency in configuring secure application environments (**Apache, Tomcat, IIS, WebLogic**) and containerization (**Docker**). Seeking a dynamic consulting role to leverage technical acumen in fortifying security postures and driving innovation.
+                </p>
+            </div>
+        </section>
 
-        <!-- 2. SKILLS Section -->
+        <!-- 3. SKILLS Section -->
         <section id="skills" class="animate-scroll">
-            <h2 class="text-4xl font-extrabold text-center mb-12 text-[var(--text-color-dark)]">Technical <span class="text-[var(--primary-color)]">Expertise</span></h2>
+            <h2 class="text-4xl font-extrabold text-center mb-12 text-[var(--text-color-dark)]">Core <span class="text-[var(--primary-color)]">Expertise</span> & Technologies</h2>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <!-- Skill Category 1: Web & Application Servers -->
-                <div class="skill-card p-6 bg-[var(--card-bg)] rounded-xl shadow-md">
-                    <div class="flex items-center space-x-3 mb-4 text-[var(--primary-color)]">
+                <!-- Skill Category 1: IAM Solutions -->
+                <div class="skill-card p-6 rounded-xl shadow-sm">
+                    <div class="flex items-center space-x-3 mb-3 text-[var(--primary-color)]">
+                        <span data-lucide="user-check" class="w-6 h-6"></span>
+                        <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Identity & Access Management (IAM)</h3>
+                    </div>
+                    <ul class="space-y-2 text-gray-600 text-sm pl-0">
+                        <li>IGA (Identity Governance and Administration)</li>
+                        <li>PAM (Privileged Access Management)</li>
+                        <li>SSO (Single Sign-On), MFA (Multi-Factor Auth)</li>
+                        <li>Active Directory / LDAP Integration</li>
+                    </ul>
+                </div>
+
+                <!-- Skill Category 2: Web & Application Servers -->
+                <div class="skill-card p-6 rounded-xl shadow-sm" style="transition-delay: 0.1s;">
+                    <div class="flex items-center space-x-3 mb-3 text-[var(--primary-color)]">
                         <span data-lucide="server-cog" class="w-6 h-6"></span>
-                        <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Web & Application Servers</h3>
+                        <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Application Deployment & Servers</h3>
                     </div>
-                    <ul class="space-y-2 text-gray-600 list-none">
-                        <li>Apache HTTP Server</li>
-                        <li>Tomcat</li>
-                        <li>IIS</li>
-                        <li>WebLogic</li>
+                    <ul class="space-y-2 text-gray-600 text-sm pl-0">
+                        <li>Apache HTTP Server, Tomcat, IIS, WebLogic</li>
+                        <li>SSL/TLS Configuration & Certificate Management</li>
+                        <li>Reverse Proxy Setup & Hardening</li>
+                        <li>Performance Tuning & High Availability</li>
                     </ul>
                 </div>
 
-                <!-- Skill Category 2: Networking Concepts -->
-                <div class="skill-card p-6 bg-[var(--card-bg)] rounded-xl shadow-md" style="transition-delay: 0.1s;">
-                    <div class="flex items-center space-x-3 mb-4 text-[var(--primary-color)]">
+                <!-- Skill Category 3: Infrastructure & Networking -->
+                <div class="skill-card p-6 rounded-xl shadow-sm" style="transition-delay: 0.2s;">
+                    <div class="flex items-center space-x-3 mb-3 text-[var(--primary-color)]">
                         <span data-lucide="network" class="w-6 h-6"></span>
-                        <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Networking Concepts</h3>
+                        <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Infrastructure & Networking</h3>
                     </div>
-                    <ul class="space-y-2 text-gray-600 list-none">
-                        <li>DNS</li>
-                        <li>Firewalls, DMZ</li>
-                        <li>SSL/TLS Configuration</li>
+                    <ul class="space-y-2 text-gray-600 text-sm pl-0">
+                        <li>Firewalls, DMZ, Secure DNS</li>
+                        <li>Docker Containerization</li>
+                        <li>Oracle, Microsoft SQL Server (MSSQL)</li>
+                        <li>Shell scripting & PowerShell Automation</li>
                     </ul>
                 </div>
 
-                <!-- Skill Category 3: Database Systems -->
-                <div class="skill-card p-6 bg-[var(--card-bg)] rounded-xl shadow-md" style="transition-delay: 0.2s;">
-                    <div class="flex items-center space-x-3 mb-4 text-[var(--primary-color)]">
-                        <span data-lucide="database" class="w-6 h-6"></span>
-                        <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Database Systems</h3>
+                <!-- Skill Category 4: Security & Cloud Fundamentals -->
+                <div class="skill-card p-6 rounded-xl shadow-sm" style="transition-delay: 0.3s;">
+                    <div class="flex items-center space-x-3 mb-3 text-[var(--primary-color)]">
+                        <span data-lucide="cloud" class="w-6 h-6"></span>
+                        <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Cloud & Security Fundamentals</h3>
                     </div>
-                    <ul class="space-y-2 text-gray-600 list-none">
-                        <li>Oracle</li>
-                        <li>Microsoft SQL Server (MSSQL)</li>
-                    </ul>
-                </div>
-
-                 <!-- Skill Category 4: Containerization -->
-                <div class="skill-card p-6 bg-[var(--card-bg)] rounded-xl shadow-md" style="transition-delay: 0.3s;">
-                    <div class="flex items-center space-x-3 mb-4 text-[var(--primary-color)]">
-                        <span data-lucide="box" class="w-6 h-6"></span>
-                        <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Containerization</h3>
-                    </div>
-                    <ul class="space-y-2 text-gray-600 list-none">
-                        <li>Docker</li>
-                    </ul>
-                </div>
-
-                <!-- Skill Category 5: Scripting Languages -->
-                <div class="skill-card p-6 bg-[var(--card-bg)] rounded-xl shadow-md" style="transition-delay: 0.4s;">
-                    <div class="flex items-center space-x-3 mb-4 text-[var(--primary-color)]">
-                        <span data-lucide="terminal" class="w-6 h-6"></span>
-                        <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Scripting Languages</h3>
-                    </div>
-                    <ul class="space-y-2 text-gray-600 list-none">
-                        <li>Shell scripting</li>
-                        <li>PowerShell</li>
+                    <ul class="space-y-2 text-gray-600 text-sm pl-0">
+                        <li>Zero Trust Architectures</li>
+                        <li>Security Posture Assessments / Audits</li>
+                        <li>Defending Computer Networks</li>
+                        <li>Cloud Computing Principles</li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <!-- 3. EXPERIENCE Section -->
+        <!-- 4. EXPERIENCE Section -->
         <section id="experience" class="animate-scroll">
-            <h2 class="text-4xl font-extrabold text-center mb-12 text-[var(--text-color-dark)]">Professional <span class="text-[var(--primary-color)]">Experience</span></h2>
+            <h2 class="text-4xl font-extrabold text-center mb-12 text-[var(--text-color-dark)]">Professional <span class="text-[var(--primary-color)]">History</span></h2>
 
             <div class="max-w-4xl mx-auto space-y-12">
+                
                 <!-- Job 1: SECLORE -->
                 <div class="timeline-item pb-10">
                     <div class="timeline-dot"></div>
-                    <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-xl border border-gray-200 hover:shadow-red-200/50 transition duration-300">
-                        <h3 class="text-2xl font-bold text-[var(--primary-color)]">Technical Consultant</h3>
-                        <p class="text-xl text-[var(--text-color-dark)] mt-1">SECLORE</p>
+                    <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-lg border border-gray-200">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-[var(--primary-color)] text-white mb-2">Technical Consultant</span>
+                        <p class="text-xl font-bold text-[var(--text-color-dark)]">SECLORE</p>
                         <p class="text-sm text-gray-500 mb-4">September 2024 - Present | Mumbai, IN</p>
-                        <ul class="list-disc space-y-2 pl-5 text-gray-700">
-                            <li>Led end-to-end deployment, integration, and performance tuning of Seclore products across diverse client environments.</li>
-                            <li>Configured and managed web/application servers (Apache, Tomcat, IIS, WebLogic), including SSL/TLS setup and certificate management.</li>
-                            <li>Designed and implemented secure server infrastructures using DNS, firewalls, DMZ zones, and reverse proxy configurations.</li>
-                            <li>Utilized Docker and automation scripts (Shell, PowerShell) to streamline deployment and management processes.</li>
+                        <ul class="list-disc space-y-2 pl-5 text-gray-700 text-base">
+                            <li>Led **end-to-end deployment, integration, and performance tuning** of Seclore products across diverse client environments.</li>
+                            <li>Configured and managed secure web/application servers (Apache, Tomcat, IIS, WebLogic), including **SSL/TLS setup and certificate management**.</li>
+                            <li>Designed and implemented secure server infrastructures using **DNS, firewalls, DMZ zones**, and reverse proxy configurations.</li>
+                            <li>Utilized **Docker** and automation scripts (Shell, PowerShell) to streamline deployment and management processes.</li>
                         </ul>
                     </div>
                 </div>
@@ -259,29 +262,29 @@
                 <!-- Job 2: ARCON TECHSOLUTIONS -->
                 <div class="timeline-item pb-10" style="transition-delay: 0.2s;">
                     <div class="timeline-dot"></div>
-                    <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-xl border border-gray-200 hover:shadow-red-200/50 transition duration-300">
-                        <h3 class="text-2xl font-bold text-[var(--primary-color)]">Technical Support Engineer L2</h3>
-                        <p class="text-xl text-[var(--text-color-dark)] mt-1">ARCON TECHSOLUTIONS</p>
+                    <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-lg border border-gray-200">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-gray-400 text-white mb-2">Technical Support Engineer L2</span>
+                        <p class="text-xl font-bold text-[var(--text-color-dark)]">ARCON TECHSOLUTIONS</p>
                         <p class="text-sm text-gray-500 mb-4">May 2022 - August 2024 | Mumbai, IN</p>
-                        <ul class="list-disc space-y-2 pl-5 text-gray-700">
-                            <li>Designed and implemented comprehensive IAM solutions (IGA, PAM, SSO, MFA) for enterprise customers.</li>
-                            <li>Integrated IAM solutions with various enterprise systems including Active Directory, LDAP, and cloud applications.</li>
-                            <li>Conducted assessments and audits of IAM systems to ensure compliance with regulatory requirements.</li>
-                            <li>Managed IAM projects from inception (requirements gathering) to completion (deployment).</li>
+                        <ul class="list-disc space-y-2 pl-5 text-gray-700 text-base">
+                            <li>Designed and implemented comprehensive **IAM solutions** (IGA, PAM, SSO, MFA) for enterprise customers.</li>
+                            <li>Integrated IAM solutions with enterprise systems including **Active Directory, LDAP**, and cloud applications.</li>
+                            <li>Conducted **assessments and audits** of IAM systems to ensure regulatory compliance.</li>
+                            <li>Managed IAM projects from inception (**requirements gathering**) to completion (**deployment**).</li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Job 3: TATA CONSULTANCY SERVICES -->
-                <div class="timeline-item pb-10" style="transition-delay: 0.4s;">
+                <div class="timeline-item timeline-last pb-0" style="transition-delay: 0.4s;">
                     <div class="timeline-dot"></div>
-                    <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-xl border border-gray-200 hover:shadow-red-200/50 transition duration-300">
-                        <h3 class="text-2xl font-bold text-[var(--primary-color)]">Support Specialist L1</h3>
-                        <p class="text-xl text-[var(--text-color-dark)] mt-1">TATA CONSULTANCY SERVICES</p>
+                    <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-lg border border-gray-200">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-gray-400 text-white mb-2">Support Specialist L1</span>
+                        <p class="text-xl font-bold text-[var(--text-color-dark)]">TATA CONSULTANCY SERVICES</p>
                         <p class="text-sm text-gray-500 mb-4">Jan 2020 - May 2022 | Mumbai, IN</p>
-                        <ul class="list-disc space-y-2 pl-5 text-gray-700">
-                            <li>Worked on IBM Verify to provide seamless SSO by onboarding Active Directory applications and implementing password management.</li>
-                            <li>Supported the implementation and administration of IAM solutions for enterprise customers.</li>
+                        <ul class="list-disc space-y-2 pl-5 text-gray-700 text-base">
+                            <li>Supported the implementation and administration of **IAM solutions** for enterprise customers.</li>
+                            <li>Worked on IBM Verify to provide seamless **SSO** by onboarding Active Directory applications and implementing password management.</li>
                             <li>Assisted in the integration of IAM solutions with systems like Active Directory and LDAP.</li>
                         </ul>
                     </div>
@@ -289,11 +292,37 @@
             </div>
         </section>
 
-        <!-- 4. PROJECTS Section (Placeholder for future projects) -->
+        <!-- 5. EDUCATION Section -->
+        <section id="education" class="animate-scroll">
+            <h2 class="text-4xl font-extrabold text-center mb-12 text-[var(--text-color-dark)]">Education & <span class="text-[var(--primary-color)]">Coursework</span></h2>
+
+            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                <!-- Degree Card -->
+                <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-md border-t-4 border-[var(--primary-color)]">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-dark)] mb-1">B.S. in Computer Science</h3>
+                    <p class="text-lg text-gray-700">University of Mumbai</p>
+                    <p class="text-sm text-gray-500 mt-1">November 2020 | CGPA: 7.56/10.00</p>
+                </div>
+                
+                <!-- Coursework Card -->
+                <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-md border-t-4 border-gray-300">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-dark)] mb-3">Relevant Coursework</h3>
+                    <div class="flex flex-wrap gap-2 text-sm">
+                        <span class="px-3 py-1 bg-red-100 text-[var(--primary-color)] rounded-full font-medium">Advanced Machine Learning</span>
+                        <span class="px-3 py-1 bg-red-100 text-[var(--primary-color)] rounded-full font-medium">Cloud Computing</span>
+                        <span class="px-3 py-1 bg-red-100 text-[var(--primary-color)] rounded-full font-medium">Defending Computer Networks</span>
+                        <span class="px-3 py-1 bg-red-100 text-[var(--primary-color)] rounded-full font-medium">Operating Systems</span>
+                        <span class="px-3 py-1 bg-red-100 text-[var(--primary-color)] rounded-full font-medium">Unix Tools and Scripting</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. PROJECTS Section (Placeholder) -->
         <section id="projects" class="animate-scroll">
             <h2 class="text-4xl font-extrabold text-center mb-12 text-[var(--text-color-dark)]">Key <span class="text-[var(--primary-color)]">Projects</span></h2>
             <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
-                While my core work is consultancy, I am currently developing personal projects to showcase my proficiency in modern security deployment and automation.
+                These personal projects demonstrate hands-on application of advanced security, automation, and deployment principles outside of professional consultancy work.
             </p>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -326,7 +355,7 @@
                 <!-- Project Card Placeholder 3 -->
                 <div class="bg-[var(--card-bg)] p-6 rounded-xl shadow-md border border-gray-300 hover:border-[var(--primary-color)] transition duration-300 transform hover:scale-[1.02]">
                     <div class="flex items-center space-x-3 mb-4 text-[var(--primary-color)]">
-                        <span data-lucide="cloud" class="w-6 h-6"></span>
+                        <span data-lucide="shield-half" class="w-6 h-6"></span>
                         <h3 class="text-xl font-semibold text-[var(--text-color-dark)]">Cloud Security Blueprint</h3>
                     </div>
                     <p class="text-gray-600 mb-4 text-sm">Documentation and sample configuration for a multi-cloud (AWS/Azure) security architecture focusing on Zero Trust principles and secure connectivity.</p>
@@ -338,7 +367,7 @@
             </div>
         </section>
 
-        <!-- 5. CONTACT Section -->
+        <!-- 7. CONTACT Section -->
         <section id="contact" class="animate-scroll">
             <h2 class="text-4xl font-extrabold text-center mb-12 text-[var(--text-color-dark)]">Let's <span class="text-[var(--primary-color)]">Connect</span></h2>
             
@@ -362,7 +391,7 @@
                                   class="w-full px-4 py-3 rounded-lg bg-white border border-gray-300 text-gray-800 focus:border-[var(--primary-color)] focus:ring-1 focus:ring-[var(--primary-color)] outline-none transition duration-300"
                                   placeholder="How can I assist you with your cybersecurity needs?"></textarea>
                     </div>
-                    <button type="submit" class="w-full px-6 py-3 bg-[var(--primary-color)] text-white font-bold rounded-lg hover:bg-[var(--primary-hover)] transition duration-300 transform hover:scale-[1.01] shadow-lg shadow-red-300/50">
+                    <button type="submit" class="w-full px-6 py-3 bg-[var(--primary-color)] text-white font-bold rounded-lg hover:bg-[var(--primary-hover)] transition duration-300 shadow-lg shadow-red-400/50">
                         Send Message
                     </button>
                 </form>
@@ -389,7 +418,7 @@
     <!-- Footer -->
     <footer class="bg-[var(--card-bg)] mt-20 py-8 border-t border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600">
-            <p>&copy; 2024 Naved Shaikh. All rights reserved.</p>
+            <p>&copy; 2024 Naved Shaikh. Built for a professional edge.</p>
         </div>
     </footer>
 
@@ -409,7 +438,7 @@
             });
         }, {
             rootMargin: '0px',
-            threshold: 0.2 // Start fade-in when 20% of the item is visible
+            threshold: 0.1 // Start fade-in when 10% of the item is visible
         });
 
         // Apply observer to all elements marked for animation
@@ -429,5 +458,4 @@
     </script>
 </body>
 </html>
-
 
